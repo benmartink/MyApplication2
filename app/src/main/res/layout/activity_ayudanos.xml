@@ -1,0 +1,119 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFFFFF"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#06A488"
+        android:padding="15dp">
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/btnRegresar"
+            android:src="@drawable/regresar"
+            android:onClick="regresarHome"
+            android:background="@android:color/transparent"
+            android:padding="5dp"
+            android:layout_marginTop="10dp"
+            />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/imageView4"
+            android:src="@drawable/logogeneral2trasparente"
+            android:layout_marginLeft="2dp"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="fill_parent"
+        android:padding="20dp"
+        android:visibility="visible"
+        android:id="@+id/formularioComentario">
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Ayudanos a mejorar!"
+            android:textColor="#000000"
+            android:textSize="18dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Te agradecemos dejar algún comentario de mejora o reportar algún error"
+            android:id="@+id/textView4"
+            android:textColor="#000000"
+            android:layout_marginTop="10dp" />
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/linearlayoutborder"
+            android:layout_marginTop="15dp">
+
+            <EditText android:layout_gravity="center"
+                android:id="@+id/txtComentario"
+                android:layout_height="wrap_content"
+                android:layout_width="fill_parent"
+                android:width="250dip"
+                android:maxLength="760"
+                android:gravity="top"
+                android:lines="10"
+                android:hint="Tu comentario"
+                android:textColor="#000000"></EditText>
+        </LinearLayout>
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Enviar"
+            android:id="@+id/btnEnviarComentario"
+            android:background="@drawable/buttoninicioizquierda"
+            android:onClick="enviarComentario"
+            android:layout_marginTop="10dp" />
+    </LinearLayout>
+
+    <RelativeLayout
+        style="@style/GenericProgressBackground"
+        android:id="@+id/loadingPanelAyudanos"
+        android:visibility="gone"
+        >
+        <ProgressBar
+            style="@style/GenericProgressIndicator"/>
+    </RelativeLayout>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/mensajeGraciasComentario"
+        android:visibility="gone">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Gracias por tu comentario! Nos ayuda mucho en brindarte un mejor servicio!"
+            android:id="@+id/textView5"
+            android:textColor="#000000"
+            android:layout_margin="20dp"
+            android:textAlignment="center"
+            android:textSize="18dp" />
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Ir a Inicio"
+            android:id="@+id/btnRegresarInicio"
+            android:background="@drawable/buttoninicioizquierda"
+            android:onClick="regresarHome"
+            android:layout_marginTop="10dp" />
+    </LinearLayout>
+
+</LinearLayout>

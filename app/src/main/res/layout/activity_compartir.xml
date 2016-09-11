@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="#FFFFFF">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#06A488"
+        android:padding="15dp">
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/btnRegresar"
+            android:src="@drawable/regresar"
+            android:onClick="regresarHome"
+            android:background="@android:color/transparent"
+            android:padding="5dp"
+            android:layout_marginTop="10dp"
+            />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/imageView4"
+            android:src="@drawable/logogeneral2trasparente"
+            android:layout_marginLeft="2dp"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="fill_parent">
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="¡Ellos están cerca de tí!"
+            android:textColor="#000000"
+            android:layout_margin="10dp"
+            android:textSize="16dp" />
+
+        <LinearLayout
+            android:orientation="vertical" android:layout_width="fill_parent"
+            android:layout_height="fill_parent" android:weightSum="100">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="50">
+
+
+                <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+                    xmlns:tools="http://schemas.android.com/tools"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/map"
+                    tools:context=".activity_compartir"
+                    android:name="com.google.android.gms.maps.SupportMapFragment"
+                    android:layout_alignParentStart="true" />
+            </LinearLayout>
+
+            <LinearLayout android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_weight="50">
+                <fragment
+                    android:id="@+id/fragment1"
+                    android:name="demo.java.com.myapplication2.CustomControls.AdapterContactosCercanos.MyListFragment"
+                    android:layout_width="match_parent"
+                    android:tag="fragment1"
+                    android:layout_height="match_parent" />
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

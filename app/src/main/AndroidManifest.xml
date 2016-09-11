@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="demo.java.com.myapplication2">
+
+    <permission
+        android:name="demo.java.com.myapplication2.permission.MAPS_RECEIVE"
+        android:protectionLevel="signature" />
+
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <uses-permission android:name="android.permission.WRITE_CONTACTS" />
+    <uses-permission android:name="info.devexchanges.googlelocation.permission.MAPS_RECEIVE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.READ_LOGS" />
+    <uses-permission android:name="android.permission.CALL_PHONE" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="@string/api_key" />
+
+        <activity android:name=".MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+
+        <activity android:name=".activity_sign_in" />
+        <activity android:name=".activity_home" />
+        <activity android:name=".activity_compartir" />
+        <activity android:name=".activity_contactos" />
+        <activity
+            android:name=".activity_compartircontactos"
+            android:label="@string/title_activity_activity_compartircontactos" />
+        <activity android:name=".CustomControls.AdapterContactosCercanos.AdapterMisContactos.MyAdapterContactos" />
+        <activity android:name=".activity_detallecontacto" />
+        <activity android:name=".activity_sign_up" />
+        <activity android:name=".activity_opciones" />
+        <activity android:name=".activity_ayudanos"></activity>
+    </application>
+
+</manifest>
