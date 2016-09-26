@@ -25,6 +25,8 @@ public class MyAdapterContactos extends BaseAdapter {
     List<EN_Usuario> rowItem;
     Context context;
 
+    public MyAdapterContactos(){}
+
     public MyAdapterContactos(Context context, List<EN_Usuario> rowItem) {
         //mList = list;
         this.rowItem = rowItem;

@@ -17,9 +17,10 @@
         android:id="@+id/btnColor"
         android:layout_width="0dp"
         android:layout_height="35dp"
-        android:layout_weight=".20"
-        android:text="Agregar"
-        android:background="@drawable/buttoninicioizquierda">
+        android:layout_weight=".25"
+        android:text="Compartir"
+        android:background="@drawable/buttoninicioizquierda"
+        android:textSize="13dp">
     </Button>
 
 </LinearLayout>

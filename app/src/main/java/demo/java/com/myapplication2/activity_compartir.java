@@ -456,4 +456,7 @@ public class activity_compartir extends FragmentActivity implements OnMapReadyCa
             return sb.toString();
         }
     }
+
+    @Override
+    public void onBackPressed() { }
 }

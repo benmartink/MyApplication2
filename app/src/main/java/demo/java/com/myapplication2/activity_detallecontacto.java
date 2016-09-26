@@ -173,4 +173,7 @@ public class activity_detallecontacto extends AppCompatActivity {
     public void regresarHome(View view) {
         finish();
     }
+
+    @Override
+    public void onBackPressed() { }
 }

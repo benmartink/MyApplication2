@@ -25,7 +25,6 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.List;
 
-import demo.java.com.myapplication2.ContactManager;
 import demo.java.com.myapplication2.EN_Usuario;
 import demo.java.com.myapplication2.R;
 import demo.java.com.myapplication2.SessionManager;
@@ -165,7 +164,7 @@ public class CustomAdapter extends BaseAdapter {
         protected void onPostExecute(Void aVoid) {
             if(usuarioAgregado)
             {
-                new HttpRequestObtenerDatosContacto().execute(strIdContacto);
+                //new HttpRequestObtenerDatosContacto().execute(strIdContacto);
             }
             else
             {
@@ -195,104 +194,4 @@ public class CustomAdapter extends BaseAdapter {
             return sb.toString();
         }
     }
-
-    public class HttpRequestObtenerDatosContacto extends AsyncTask<String,Void,Void> {
-        String strIdUsuario = "";
-        HttpURLConnection urlConnection = null;
-        EN_Usuario objUsuario;
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-        }
-
-        @Override
-        protected Void doInBackground(String... params) {
-            Log.i("SYNC", "INIT");
-
-            try {
-                if (params!=null)
-                {
-                    if(params.length > 0)
-                    {
-                        strIdUsuario = params[0];
-                    }
-                }
-                URL url = new URL(context.getApplicationContext().getResources().getString(R.string.urlServicio) + "/Usuario.svc/obtenerUsuario/" + strIdUsuario);
-                Log.i("response", context.getApplicationContext().getResources().getString(R.string.urlServicio) + "/Usuario.svc/obtenerUsuario/" + strIdUsuario);
-                urlConnection = (HttpURLConnection) url.openConnection();
-                urlConnection.setConnectTimeout(10000);
-                urlConnection.setReadTimeout(20000);
-                //urlConnection.setDoOutput(true);
-                urlConnection.setRequestProperty("Content-Type", "application/json");
-
-                Log.i("Paso", "1");
-                InputStream in = new BufferedInputStream(urlConnection.getInputStream());
-                Log.i("Paso", "1.1");
-                String response = convertStreamToString(in).trim();
-                Log.i("Paso", "2");
-                if (response.length()>0)
-                {
-                    Log.i("response", response);
-                    JSONObject x = new JSONObject(response);
-                    objUsuario = EN_Usuario.fromJson(x);
-                    if (objUsuario!=null) {
-                        usuarioObtenido = true;
-                    }else
-                    {
-                        usuarioObtenido = false;
-                    }
-                }
-                else
-                {
-                    usuarioObtenido = false;
-                    Log.i("response", "sin dato");
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            if(usuarioObtenido)
-            {
-                String DisplayName = objUsuario.getNombres() + " " + objUsuario.getApellidos();
-                String MobileNumber = objUsuario.getCelularFijo();
-                String HomeNumber = null;
-                String WorkNumber = null;
-                String emailID = objUsuario.getCorreo();
-                String company = "";
-                String jobTitle = objUsuario.getCargo();
-                ContactManager objContactManager = new ContactManager(DisplayName, MobileNumber, HomeNumber, WorkNumber, emailID,company, jobTitle,context);
-                Toast.makeText(context.getApplicationContext(), "Se agregó a " + DisplayName, Toast.LENGTH_SHORT).show();
-            }
-            super.onPostExecute(aVoid);
-        }
-
-        private String convertStreamToString(InputStream is) {
-            BufferedReader reader = new BufferedReader(new InputStreamReader(is));
-            StringBuilder sb = new StringBuilder();
-            String line;
-            try {
-                while ((line = reader.readLine()) != null) {
-                    line = line + "\n";
-                    sb.append(line);
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            } finally {
-                try {
-                    is.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-            return sb.toString();
-        }
-    }
-
 }

@@ -46,13 +46,14 @@ public class activity_contactos extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contactos);
 
+        mCount = 1;
         SessionManager session = new SessionManager(getApplicationContext());
         boolean sesionIniciada = session.isLoggedIn();
         if(sesionIniciada)
         {
-            mCount = 0;
+            Intent intent = this.getIntent();
             mHaveMoreDataToLoad = true;
-            adapter = new MyAdapterContactos(activity_contactos.this, null);
+            adapter = new MyAdapterContactos(activity_contactos.this,null);
             endlessListView = (EndlessListView) findViewById(R.id.endlessListView);
 
             endlessListView.setAdapter(adapter);
@@ -81,7 +82,7 @@ public class activity_contactos extends Activity {
 
     private void loadMoreData() {
         SessionManager session = new SessionManager(getApplicationContext());
-        new LoadMore().execute(session.getUserDetails().get("IdUsuario") + "");
+        new LoadMore().execute(session.getUserDetails().get("IdUsuario") + "", mCount + "");
     }
 
     private EndlessListView.OnLoadMoreListener loadMoreListener = new EndlessListView.OnLoadMoreListener() {
@@ -102,10 +103,10 @@ public class activity_contactos extends Activity {
         String strIdUsuario = "";
         HttpURLConnection urlConnection = null;
         ArrayList<EN_Usuario> objUsuarios = null;
+        String paginaActual = "";
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            mCount++;
         }
 
         @Override
@@ -119,11 +120,13 @@ public class activity_contactos extends Activity {
                     if(params.length > 0)
                     {
                         strIdUsuario = params[0];
+                        paginaActual = params[1];
                     }
                 }
 
-                URL url = new URL(getResources().getString(R.string.urlServicio) + "/Contacto.svc/obtenerContactos/" + strIdUsuario + "/" + mCount + "/" + CantidadPorPagina);
-                Log.i("response", getResources().getString(R.string.urlServicio) + "/Contacto.svc/obtenerContactos/" + strIdUsuario + "/" + mCount + "/" + CantidadPorPagina);
+                URL url = new URL(getResources().getString(R.string.urlServicio) + "/Contacto.svc/obtenerContactos/" + strIdUsuario + "/" + (paginaActual) + "/" + CantidadPorPagina);
+                Log.i("mCount", "paginaActual: doInBackground: " + paginaActual);
+                Log.i("response", getResources().getString(R.string.urlServicio) + "/Contacto.svc/obtenerContactos/" + strIdUsuario + "/" + (paginaActual) + "/" + CantidadPorPagina);
                 urlConnection = (HttpURLConnection) url.openConnection();
                 urlConnection.setConnectTimeout(10000);
                 urlConnection.setReadTimeout(20000);
@@ -166,7 +169,7 @@ public class activity_contactos extends Activity {
             adapter.addItems(objUsuarios);
             endlessListView.loadMoreCompleat();
             mHaveMoreDataToLoad = mCount < CantidadPaginas;
-            findViewById(R.id.loadingPanelContactos).setVisibility(View.GONE);
+            //findViewById(R.id.loadingPanelContactos).setVisibility(View.GONE);
         }
 
         private String convertStreamToString(InputStream is) {
@@ -197,8 +200,6 @@ public class activity_contactos extends Activity {
 
         @Override
         protected void onPreExecute() {
-            mCount = 0;
-            findViewById(R.id.loadingPanelContactos).setVisibility(View.VISIBLE);
             super.onPreExecute();
         }
 
@@ -243,7 +244,8 @@ public class activity_contactos extends Activity {
         protected void onPostExecute(Void aVoid) {
             Double division = Math.ceil(CantidadTotalContactos / CantidadPorPagina);
             CantidadPaginas = division.intValue();
-            new LoadMore().execute(_strGUID);
+            mCount++;
+            new LoadMore().execute(_strGUID, mCount+ "");
         }
 
         private String convertStreamToString(InputStream is) {
@@ -270,5 +272,10 @@ public class activity_contactos extends Activity {
 
     public void regresarHome(View view) {
         finish();
+        //System.exit(0);
     }
+
+    @Override
+    public void onBackPressed() { }
+
 }

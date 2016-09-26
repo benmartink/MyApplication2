@@ -1,63 +1,55 @@
 package demo.java.com.myapplication2;
 
+import android.content.Intent;
 import android.os.AsyncTask;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-public class activity_ayudanos extends AppCompatActivity {
+public class activity_recuperarclave extends AppCompatActivity {
 
-    EditText etComentario;
-    String strComentario;
-    Boolean comentarioEnviado = false;
+    EditText etUserName;
+    String usr;
+    Boolean correoEnviado = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_ayudanos);
+        setContentView(R.layout.activity_recuperarclave);
     }
 
-    public void regresarHome(View view) {
-        finish();
-    }
-
-    public void enviarComentario(View view) {
-        etComentario= (EditText)findViewById(R.id.txtComentario);
-
-        strComentario = etComentario.getText().toString();
-        if (strComentario.trim().length()==0)
+    public void recuperarClave(View view) {
+        etUserName = (EditText)findViewById(R.id.etUserName);
+        usr = etUserName.getText().toString();
+        if (usr.trim().length()==0)
         {
-            Toast.makeText(getApplicationContext(), "Ingrese un comentario", Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), "Ingrese una cuenta de correo electrónico", Toast.LENGTH_LONG).show();
         }
         else
         {
-            SessionManager session = new SessionManager(getApplicationContext());
-            new HttpRequestEnviarComentario().execute(strComentario, session.getUserDetails().get("IdUsuario"));
+            new HttpRequestRecuperarClave().execute(usr);
         }
     }
 
-    public class HttpRequestEnviarComentario extends AsyncTask<String,Void,Void> {
-        String _strComentario, _strGUID;
+    public class HttpRequestRecuperarClave extends AsyncTask<String,Void,Void> {
+        String strUser = "";
         HttpURLConnection urlConnection = null;
+        EN_Usuario objUsuario;
 
         @Override
         protected void onPreExecute() {
-            findViewById(R.id.loadingPanelAyudanos).setVisibility(View.VISIBLE);
+            findViewById(R.id.loadingPanelRecuperarClave).setVisibility(View.VISIBLE);
             super.onPreExecute();
 
         }
@@ -71,38 +63,27 @@ public class activity_ayudanos extends AppCompatActivity {
                 {
                     if(params.length > 0)
                     {
-                        _strComentario = params[0];
-                        _strGUID = params[1];
+                        strUser = params[0];
                     }
                 }
-                URL url = new URL(getResources().getString(R.string.urlServicio) + "/Comentario.svc/guardarComentario");
-                Log.i("response", getResources().getString(R.string.urlServicio) + "/Comentario.svc/guardarComentario");
+                URL url = new URL(getResources().getString(R.string.urlServicio) + "/Usuario.svc/recuperarClave/" + strUser);
+                Log.i("response", getResources().getString(R.string.urlServicio) + "/Usuario.svc/recuperarClave/" + strUser);
                 urlConnection = (HttpURLConnection) url.openConnection();
                 urlConnection.setConnectTimeout(10000);
                 urlConnection.setReadTimeout(20000);
-                urlConnection.setDoOutput(true);
                 urlConnection.setRequestProperty("Content-Type", "application/json");
-
-                OutputStreamWriter out = new OutputStreamWriter(urlConnection.getOutputStream());
-                JSONObject jsonObject = new JSONObject();
-                jsonObject.put("Comentario", _strComentario);
-                jsonObject.put("GUID", _strGUID);
-
-                out.write(jsonObject.toString());
-                out.close();
 
                 InputStream in = new BufferedInputStream(urlConnection.getInputStream());
                 String response = convertStreamToString(in).trim();
-
                 if (response.length()>0)
                 {
                     if(response.equals("true"))
                     {
-                        comentarioEnviado = true;
+                        correoEnviado = true;
                     }
                     if(response.equals("false"))
                     {
-                        comentarioEnviado = false;
+                        correoEnviado = false;
                     }
                 }
                 else
@@ -111,26 +92,24 @@ public class activity_ayudanos extends AppCompatActivity {
                 }
             } catch (IOException e) {
                 e.printStackTrace();
-            } catch (JSONException e) {
-                e.printStackTrace();
             }
             return null;
         }
 
         @Override
         protected void onPostExecute(Void aVoid) {
-            findViewById(R.id.loadingPanelAyudanos).setVisibility(View.GONE);
-            if(comentarioEnviado)
+            super.onPostExecute(aVoid);
+            if(correoEnviado)
             {
-                findViewById(R.id.formularioComentario).setVisibility(View.GONE);
-                findViewById(R.id.mensajeGraciasComentario).setVisibility(View.VISIBLE);
-                Toast.makeText(getApplicationContext(), "Gracias por tu comentario!", Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(),"Tu contraseña fue enviada a tu buzón de correo", Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(getApplicationContext(), activity_sign_in.class);
+                startActivity(intent);
             }
             else
             {
-                Toast.makeText(getApplicationContext(), "No se pudo enviar", Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(),"No se encontró correo electrónico", Toast.LENGTH_LONG).show();
             }
-            super.onPostExecute(aVoid);
+            findViewById(R.id.loadingPanelRecuperarClave).setVisibility(View.GONE);
         }
 
         private String convertStreamToString(InputStream is) {
@@ -154,7 +133,4 @@ public class activity_ayudanos extends AppCompatActivity {
             return sb.toString();
         }
     }
-
-    @Override
-    public void onBackPressed() { }
 }

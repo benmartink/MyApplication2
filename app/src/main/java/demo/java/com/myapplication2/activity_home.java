@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -21,6 +22,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
 
 public class activity_home extends AppCompatActivity {
 
@@ -28,6 +30,7 @@ public class activity_home extends AppCompatActivity {
     EditText etNombres, etApellidos, etProfesion, etCelular ;
     String strNombres, strApellidos, strProfesion, strCelular ;
     Boolean usuarioActualizado = false;
+    Boolean encontroContactos = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,12 +97,17 @@ public class activity_home extends AppCompatActivity {
         Intent i=new Intent(android.content.Intent.ACTION_SEND);
         i.setType("text/plain");
         i.putExtra(android.content.Intent.EXTRA_SUBJECT, "Te invito a usar ContactMe!");
-        i.putExtra(android.content.Intent.EXTRA_TEXT, "Agrega contactos en solo segundos! Descagarla desde el Play Store, búscala como ContactMe");
-        startActivity(Intent.createChooser(i, "Share via"));
+        i.putExtra(android.content.Intent.EXTRA_TEXT, "Agrega contactos en solo segundos! Descagarla desde el Play Store como ContactMe http://bit.ly/2dat1Ft");
+        startActivity(Intent.createChooser(i, "Compartir usando"));
     }
 
     public void ayudanosAMejorar(View view) {
         Intent intent = new Intent(this, activity_ayudanos.class);
+        startActivity(intent);
+    }
+
+    public void verPoliticasPrivacidad(View view) {
+        Intent intent = new Intent(this, activity_politicaseguridad.class);
         startActivity(intent);
     }
 
@@ -139,14 +147,10 @@ public class activity_home extends AppCompatActivity {
                 //urlConnection.setDoOutput(true);
                 urlConnection.setRequestProperty("Content-Type", "application/json");
 
-                Log.i("Paso", "1");
                 InputStream in = new BufferedInputStream(urlConnection.getInputStream());
-                Log.i("Paso", "1.1");
                 String response = convertStreamToString(in).trim();
-                Log.i("Paso", "2");
                 if (response.length()>0)
                 {
-                    Log.i("response", response);
                     JSONObject x = new JSONObject(response);
                     objUsuario = EN_Usuario.fromJson(x);
                     if (objUsuario!=null) {
@@ -159,8 +163,9 @@ public class activity_home extends AppCompatActivity {
                 else
                 {
                     usuarioObtenido = false;
-                    Log.i("response", "sin dato");
                 }
+
+
             } catch (IOException e) {
                 e.printStackTrace();
             } catch (JSONException e) {
@@ -192,6 +197,8 @@ public class activity_home extends AppCompatActivity {
                 EditText txtCelular = (EditText) findViewById(R.id.txtCelular);
                 txtCelular.setText(objUsuario.getCelularFijo());
             }
+
+            new HttpRequestAgregarUsuariosALibretaContactos().execute(strIdUsuario);
             super.onPostExecute(aVoid);
             findViewById(R.id.loadingPanelHome).setVisibility(View.GONE);
         }
@@ -326,8 +333,120 @@ public class activity_home extends AppCompatActivity {
         }
     }
 
+    public class HttpRequestAgregarUsuariosALibretaContactos extends AsyncTask<String,Void,Void> {
+        String strIdUsuario = "";
+        HttpURLConnection urlConnection = null;
+        ArrayList<EN_Usuario> objUsuarios = null;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected Void doInBackground(String... params) {
+            Log.i("SYNC", "INIT LIBRETA");
+
+            try {
+                if (params!=null)
+                {
+                    if(params.length > 0)
+                    {
+                        strIdUsuario = params[0];
+                    }
+                }
+
+                URL url = new URL(getResources().getString(R.string.urlServicio) + "/Contacto.svc/actualizarContactosSinAgregar");
+                Log.i("response", getResources().getString(R.string.urlServicio) + "/Contacto.svc/actualizarContactosSinAgregar");
+                urlConnection = (HttpURLConnection) url.openConnection();
+                urlConnection.setConnectTimeout(10000);
+                urlConnection.setReadTimeout(20000);
+                urlConnection.setDoOutput(true);
+                urlConnection.setRequestProperty("Content-Type", "application/json");
+
+                OutputStreamWriter out = new OutputStreamWriter(urlConnection.getOutputStream());
+                JSONObject jsonObject = new JSONObject();
+                jsonObject.put("IdUsuario", strIdUsuario);
+                out.write(jsonObject.toString());
+                out.close();
+
+                InputStream in = new BufferedInputStream(urlConnection.getInputStream());
+                String response = convertStreamToString(in).trim();
+                if (response.length()>0)
+                {
+                    Log.i("response", response);
+                    JSONArray x = new JSONArray(response);
+                    objUsuarios = new ArrayList<EN_Usuario>();
+                    objUsuarios = EN_Usuario.fromJson(x);
+                    if (objUsuarios!=null) {
+                        encontroContactos = true;
+                    }else
+                    {
+                        encontroContactos = false;
+                    }
+                }
+                else
+                {
+                    encontroContactos = false;
+                    Log.i("response", "sin dato");
+                }
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            if(encontroContactos)
+            {
+                if(objUsuarios!=null) {
+                    for (int i = 0; i < objUsuarios.size(); i++) {
+                        EN_Usuario objUsuario = objUsuarios.get(i);
+                        String DisplayName = objUsuario.getNombres() + " " + objUsuario.getApellidos();
+                        String MobileNumber = objUsuario.getCelularFijo();
+                        String HomeNumber = null;
+                        String WorkNumber = null;
+                        String emailID = objUsuario.getCorreo();
+                        String company = "";
+                        String jobTitle = objUsuario.getCargo();
+                        ContactManager objContactManager = new ContactManager(DisplayName, MobileNumber, HomeNumber, WorkNumber, emailID,company, jobTitle, getApplicationContext());
+                    }
+                }
+            }
+            super.onPostExecute(aVoid);
+        }
+
+        private String convertStreamToString(InputStream is) {
+            BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+            StringBuilder sb = new StringBuilder();
+            String line;
+            try {
+                while ((line = reader.readLine()) != null) {
+                    line = line + "\n";
+                    sb.append(line);
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+                try {
+                    is.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            return sb.toString();
+        }
+    }
+
     public void demo(View view) {
         Intent intent = new Intent(this, activity_compartircontactos.class);
         startActivity(intent);
     }
+
+    @Override
+    public void onBackPressed() { }
 }

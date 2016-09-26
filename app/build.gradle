@@ -17,7 +17,7 @@ android {
         applicationId "demo.java.com.myapplication2"
         minSdkVersion 17
         targetSdkVersion 23
-        versionCode 1
+        versionCode 3
         versionName "1.0"
     }
     buildTypes {

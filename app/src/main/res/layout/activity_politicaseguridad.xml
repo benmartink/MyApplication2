@@ -1,0 +1,120 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFFFFF"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#06A488"
+        android:padding="15dp">
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/btnRegresar"
+            android:src="@drawable/regresar"
+            android:onClick="regresarHome"
+            android:background="@android:color/transparent"
+            android:padding="5dp"
+            android:layout_marginTop="10dp"
+            />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/imageView4"
+            android:src="@drawable/logogeneral2trasparente"
+            android:layout_marginLeft="2dp"/>
+    </LinearLayout>
+
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+        <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="fill_parent"
+        android:padding="20dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Políticas de Privacidad"
+            android:textColor="#000000"
+            android:textSize="20dp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Información que nos proporcionas"
+            android:id="@+id/textView6"
+            android:textColor="#000000"
+            android:textSize="16dp"
+            android:textStyle="bold"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Nombres y apellidos\n\nCorreo electrónico\n\nNúmero telefónico\n\nProfesión\n\nTus contactos (agregados mediante el app)"
+            android:id="@+id/textView7"
+            android:textColor="#000000"
+            android:paddingLeft="10dp"
+            android:paddingTop="5dp"
+            android:paddingRight="5dp"
+            android:paddingBottom="5dp"
+            android:layout_marginLeft="10dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Información registrada automáticamente"
+            android:id="@+id/textView8"
+            android:textColor="#000000"
+            android:textSize="16dp"
+            android:textStyle="bold"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Fecha de registro: Recopilamos la fecha y hora en que te registraste en ContactMe\n\nFecha en que agregaste un contacto: Recopilamos la fecha y hora que agregaste un contacto\n\nUbicación: Recopilamos tu ubicación GPS para transmitirlo a contactos cerca de tí. Es almacenada temporalmente, mientras te encuentres en la opción &quot;Buscar cerca&quot;. Al apagarse la pantalla de tu celular o al dejar de estar en la app automáticamente tus datos de ubicación se borran de nuestros servidores."
+            android:id="@+id/textView9"
+            android:textColor="#000000"
+            android:paddingLeft="10dp"
+            android:paddingTop="5dp"
+            android:paddingRight="5dp"
+            android:paddingBottom="5dp"
+            android:layout_marginLeft="10dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Cómo hacemos uso de tu información"
+            android:id="@+id/textView10"
+            android:textColor="#000000"
+            android:textSize="16dp"
+            android:textStyle="bold"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Compartir contactos: Permitimos que puedas compartir (tu información proporcionada) con otros usuarios."
+            android:id="@+id/textView11"
+            android:textColor="#000000"
+            android:paddingLeft="10dp"
+            android:paddingTop="5dp"
+            android:paddingRight="5dp"
+            android:paddingBottom="5dp"
+            android:layout_marginLeft="10dp" />
+    </LinearLayout>
+    </ScrollView>
+</LinearLayout>

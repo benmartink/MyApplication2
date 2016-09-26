@@ -60,6 +60,11 @@ public class activity_sign_in extends AppCompatActivity {
         new HttpRequestObtenerUsuario().execute(usr, pwd);
     }
 
+    public void abrirRecuperarClave(View view) {
+        Intent intent = new Intent(this, activity_recuperarclave.class);
+        startActivity(intent);
+    }
+
     public class HttpRequestObtenerUsuario extends AsyncTask<String,Void,Void> {
         String strUser = "";
         String strPwd ="";
