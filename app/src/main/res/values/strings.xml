@@ -2,7 +2,7 @@
     <string name="app_name">ContactMe</string>
     <string name="api_key">AIzaSyCuVJOIlZMINlQwaexk-E2TQ8IDzNlRe0E</string>
     <string name="title_activity_activity_compartircontactos">Map</string>
-    <string name="imgdesc">imgdesc</string>
+    <string name="imgdesc">imgdemo</string>
     <string name="urlServicio">http://MyCardApp.somee.com</string>
 
 </resources>
